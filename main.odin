@@ -12,6 +12,11 @@ import "core:sys/windows"
 // - Config file to store window position
 // - Bigger font size
 // - Better display text alignment
+// - Rational numbers
+// - +/- button
+// - Set decimal button text to . or , based on locale
+// - -no-crt
+// - Better error messages on failure to create window or register class
 
 
 CLIENT_WIDTH  :: 250;
@@ -120,7 +125,7 @@ window_callback :: proc "system" (window: windows.HWND, message_kind: u32, wpara
 			display_state.write_cursor = 1;
 		}
 		
-        case windows.WM_CLOSE, windows.WM_DESTROY: {
+		case windows.WM_CLOSE, windows.WM_DESTROY: {
 			windows.PostQuitMessage(0);
         }
 		
@@ -360,11 +365,11 @@ window_callback :: proc "system" (window: windows.HWND, message_kind: u32, wpara
 			allow_break();
 		}
 		
-        case: {
+		case: {
 			result = DefWindowProcA(window, message_kind, wparam, lparam);
 		}
     }
-    
+	
 	return result;
 }
 
