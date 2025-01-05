@@ -32,7 +32,7 @@ Calc_State :: struct {
 }
 
 Display_State :: struct {
-	text: [MAX_DIGIT_LENGTH]u8,
+	text: [MAX_DIGIT_LENGTH + 1]u8,
 	write_cursor: int,
 	append_to_text: bool,
 }
@@ -41,7 +41,7 @@ Operator :: enum {
 	None = 0, Plus, Minus, Times, Divide,
 }
 
-MAX_DIGIT_LENGTH :: 32;
+MAX_DIGIT_LENGTH :: 31;
 
 DIVISION_BY_ZERO_TEXT :: "Error";
 
@@ -149,8 +149,10 @@ window_callback :: proc "system" (window: windows.HWND, message_kind: u32, wpara
 					}
 					
 					if display_state.append_to_text {
-						display_state.text[display_state.write_cursor] = n;
-						display_state.write_cursor += 1;
+						if display_state.write_cursor < MAX_DIGIT_LENGTH {
+							display_state.text[display_state.write_cursor] = n;
+							display_state.write_cursor += 1;
+						}
 					} else {
 						display_state.text[0] = n;
 						display_state.write_cursor  = 1;
