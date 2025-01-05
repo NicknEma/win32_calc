@@ -358,7 +358,8 @@ window_callback :: proc "system" (window: windows.HWND, message_kind: u32, wpara
 			}
 			
 			// Update display
-			null_terminated: [MAX_DIGIT_LENGTH + 1]u8;
+			null_terminated: [MAX_DIGIT_LENGTH + 2]u8;
+			#assert(len(null_terminated) >= len(display_state.text), "Not enough space to copy the display text for null termination.");
 			copy(null_terminated[:], display_state.text[:display_state.write_cursor]);
 			
 			display_control := controls[Control_Menu.Label].control;
